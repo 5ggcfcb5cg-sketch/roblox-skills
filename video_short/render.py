@@ -419,8 +419,15 @@ def sc_gold(c, lt, gt, I):
             c.save(); c.translate(x + 30*math.sin(lt*2 + r0), y); c.rotate(r0 + lt*rv)
             col(c, cc, 0.9); c.rectangle(-9, -5, 18, 10); c.fill(); c.restore()
 
-SCENES = [(0, 6, sc_roof), (6, 12, sc_studio), (12, 18, sc_walk), (18, 24, sc_stage), (24, 30, sc_gold),
-          (30, 34, lambda c, lt, gt, I: sc_roof(c, lt, gt, I, True))]
+sc_sun = lambda c, lt, gt, I: sc_roof(c, lt, gt, I, True)
+if "--reftiming" in sys.argv:
+    # changements de scène calés sur les instants mesurés dans la vidéo de référence (timing seulement)
+    CUTS = [0, 0.7, 2.7, 6.1, 9.5, 12.5, 16.9, 20.9, 23.9, 27.1, 29.3, DUR]
+    ORDER = [sc_roof, sc_walk, sc_studio, sc_stage, sc_walk, sc_studio, sc_stage, sc_gold, sc_studio, sc_gold, sc_sun]
+    SCENES = [(CUTS[k], CUTS[k+1], ORDER[k]) for k in range(len(ORDER))]
+    CAPTIONS = [""]*len(SCENES)
+else:
+    SCENES = [(0, 6, sc_roof), (6, 12, sc_studio), (12, 18, sc_walk), (18, 24, sc_stage), (24, 30, sc_gold), (30, 34, sc_sun)]
 
 def caption(c, text, a, sc):
     if a <= 0 or not text: return
