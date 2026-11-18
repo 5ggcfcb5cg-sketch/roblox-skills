@@ -11,7 +11,7 @@ OUT = sys.argv[1]
 PREVIEW = "--preview" in sys.argv
 
 # Sous-titres provisoires (originaux) : remplace-les par tes propres textes autorisés.
-CAPTIONS = ["Minuit, la ville se tait", "Moi j'écris jusqu'à l'aube", "Un pas après l'autre",
+CAPTIONS = [""]*6 if "--nocap" in sys.argv else ["Minuit, la ville se tait", "Moi j'écris jusqu'à l'aube", "Un pas après l'autre",
             "Hier personne… ce soir la foule", "Le travail finit par payer", "À suivre…"]
 
 # ---------------------------------------------------------------- helpers
@@ -423,7 +423,7 @@ SCENES = [(0, 6, sc_roof), (6, 12, sc_studio), (12, 18, sc_walk), (18, 24, sc_st
           (30, 34, lambda c, lt, gt, I: sc_roof(c, lt, gt, I, True))]
 
 def caption(c, text, a, sc):
-    if a <= 0: return
+    if a <= 0 or not text: return
     c.select_font_face("DejaVu Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
     fs = 58
     while True:
